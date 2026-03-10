@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reflections in the Rain</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Georgia", serif;
+        color: #e8f4ea;
+        overflow-x: hidden;
+        min-height: 100vh;
+        background:
+          linear-gradient(
+            to bottom,
+            rgba(15, 35, 25, 0.85),
+            rgba(10, 25, 18, 0.95)
+          ),
+          url("https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80")
+            center/cover fixed;
+      }
+
+      .rain-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .rain {
+        position: absolute;
+        width: 2px;
+        height: 80px;
+        background: linear-gradient(transparent, rgba(174, 194, 184, 0.4));
+        animation: fall linear infinite;
+        top: -100px;
+      }
+
+      @keyframes fall {
+        0% {
+          transform: translateY(0);
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(calc(100vh + 100px));
+          opacity: 0;
+        }
+      }
+
+      .container {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 60px 30px;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 2.8em;
+        margin-bottom: 60px;
+        color: #c8e6d0;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        letter-spacing: 2px;
+        font-weight: 300;
+      }
+
+      .button-container {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      .random-btn {
+        background: rgba(90, 138, 106, 0.8);
+        color: #e8f4ea;
+        border: 2px solid #7ab88f;
+        padding: 15px 40px;
+        font-size: 1.2em;
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: "Georgia", serif;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      }
+
+      .random-btn:hover {
+        background: rgba(122, 184, 143, 0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(90, 138, 106, 0.5);
+      }
+
+      .random-btn:active {
+        transform: translateY(0);
+      }
+
+      .quote-card {
+        background: rgba(20, 40, 30, 0.7);
+        backdrop-filter: blur(10px);
+        border-left: 4px solid #5a8a6a;
+        padding: 35px 40px;
+        margin: 40px 0;
+        border-radius: 8px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease,
+          opacity 0.3s ease;
+        animation: fadeIn 0.8s ease-in-out;
+      }
+
+      .quote-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(90, 138, 106, 0.3);
+        border-left-color: #7ab88f;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .quote-text {
+        font-size: 1.4em;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        font-style: italic;
+        color: #d4e8da;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      }
+
+      .quote-author {
+        text-align: right;
+        font-size: 1.1em;
+        color: #9dbaa8;
+        font-style: normal;
+        letter-spacing: 1px;
+      }
+
+      .quote-author::before {
+        content: "— ";
+      }
+
+      footer {
+        text-align: center;
+        padding: 40px 20px;
+        color: #7a9a84;
+        font-size: 0.9em;
+        position: relative;
+        z-index: 2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="rain-container" id="rainContainer"></div>
+
+    <div class="container">
+      <h1>Whispers Through the Rain</h1>
+
+      <div class="button-container">
+        <button id="randomQuoteBtn" class="random-btn">
+          Show Random Quote
+        </button>
+      </div>
+
+      <div id="quoteDisplay" class="quote-card">
+        <div class="quote-text">
+          "Numbing the pain for a while will make it worse when you finally feel
+          it."
+        </div>
+        <div class="quote-author">J.K. Rowling</div>
+      </div>
+
+      <footer>
+        <p>
+          Let the rain wash away what needs to go, and nourish what needs to
+          grow.
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      // Quote collection
+      const quotes = [
+        {
+          text: "Numbing the pain for a while will make it worse when you finally feel it.",
+          author: "J.K. Rowling",
+        },
+        {
+          text: "It is better to be hated for what you are than to be loved for what you are not.",
+          author: "André Gide",
+        },
+        {
+          text: "Some old wounds never truly heal, and bleed again at the slightest word.",
+          author: "George R.R. Martin",
+        },
+        {
+          text: "You're just another story I can't tell anymore.",
+          author: "Unknown",
+        },
+        {
+          text: "The worst part of holding the memories is not the pain. It's the loneliness of it. Memories need to be shared.",
+          author: "Lois Lowry",
+        },
+        {
+          text: "What happens when people open their hearts? They get better.",
+          author: "Haruki Murakami",
+        },
+        {
+          text: "There is a crack in everything. That's how the light gets in.",
+          author: "Leonard Cohen",
+        },
+        {
+          text: "The only way out of the labyrinth of suffering is to forgive.",
+          author: "John Green",
+        },
+      ];
+
+      let lastQuoteIndex = 0;
+
+      function getRandomQuote() {
+        let randomIndex;
+        do {
+          randomIndex = Math.floor(Math.random() * quotes.length);
+        } while (randomIndex === lastQuoteIndex && quotes.length > 1);
+
+        lastQuoteIndex = randomIndex;
+        return quotes[randomIndex];
+      }
+
+      function displayRandomQuote() {
+        const quote = getRandomQuote();
+        const quoteDisplay = document.getElementById("quoteDisplay");
+
+        // Add fade out effect
+        quoteDisplay.style.opacity = "0";
+
+        setTimeout(() => {
+          quoteDisplay.querySelector(".quote-text").textContent =
+            `"${quote.text}"`;
+          quoteDisplay.querySelector(".quote-author").textContent =
+            quote.author;
+          quoteDisplay.style.opacity = "1";
+        }, 300);
+      }
+
+      // Button click event
+      document
+        .getElementById("randomQuoteBtn")
+        .addEventListener("click", displayRandomQuote);
+
+      // Create rain effect
+      function createRain() {
+        const rainContainer = document.getElementById("rainContainer");
+        const numberOfDrops = 100;
+
+        for (let i = 0; i < numberOfDrops; i++) {
+          const drop = document.createElement("div");
+          drop.classList.add("rain");
+          drop.style.left = Math.random() * 100 + "%";
+          drop.style.animationDuration = Math.random() * 1 + 0.5 + "s";
+          drop.style.animationDelay = -(Math.random() * 2) + "s"; // Negative delay to start mid-animation
+          rainContainer.appendChild(drop);
+        }
+      }
+
+      createRain();
+    </script>
+  </body>
+</html>
